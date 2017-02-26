@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>NicoNico downloader</title>
+
+  <meta charset="UTF-8"/>
+  <meta name="description" content="NicoNico downloader"/>
+  <meta name="author" content="kotborealis@gmail.com"/>
+  <meta name="keywords" content="nicovideo,downloader"/>
+
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+      transition: 0.5s;
+    }
+
+    body{
+      background: #F7F7F7;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: rgba(0, 0, 0, 0.9);
+    }
+
+    .container{
+      margin: 100px auto;
+      max-width: 700px;
+      text-align: center;
+    }
+
+    #nico{
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    h1{
+      font-size: 72px;
+      font-weight: 600;
+    }
+
+    a{
+      color: #3A87AD;
+      text-decoration: none;
+    }
+
+    .lead{
+      font-size: 21px;
+      font-weight: 200;
+      line-height: 30px;
+      margin-bottom: 20px;
+    }
+
+    .nico-input{
+      border: 1px solid #B7D1A0;
+      border-bottom: 0;
+      border-radius: 4px;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      line-height: 35px;
+      height: 40px;
+      font-size: 30px;
+      color: rgba(0, 0, 0, 0.9);
+      padding: 2px 8px;
+    }
+
+    .nico-submit{
+      background: rgba(202,230,190,.75);
+      color: #468847;
+      border: 1px solid #B7D1A0;
+      border-top: 0;
+      border-radius: 4px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      line-height: 35px;
+      height: 44px;
+      font-size: 30px;
+      padding: 4px 0;
+    }
+
+    .nico-submit:hover, .nico-submit:active, .nico-submit:focus{
+      background: #bce4aa;
+    }
+
+    .nico-action{
+      margin: 20px;
+      line-height: 20px;
+      font-size: 18px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form id="nico">
+      <h1>NicoNico!</h1>
+      <p class="lead">Download or reupload videos from NinoNico</p>
+      <input class="nico-input" type="text" placeholder="nicovideo.jp/watch/sm29394089"/>
+      <button class="nico-submit" type="submit">Nai desu</button>
+      <div class="nico-action">
+        <input type="radio" name="nico-action-group" value="download" checked> Download
+        <input type="radio" name="nico-action-group" value="reupload"> Reupload to <a href="https://www.youtube.com/channel/UCQ8PDMlMt4r-YK672QitWlQ">YouTube</a>
+      </div>
+    </form>
+  </div>
+</body>
+
+<script>
+
+</script>
+
+</html>
