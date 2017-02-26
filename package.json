@@ -4,6 +4,9 @@
   "main": "index.js",
   "repository": {},
   "license": "MIT",
+  "scripts": {
+    "start": "node lib/webserver.js"
+  },
   "dependencies": {
     "chen.js": "kotborealis/chen",
     "debug": "^2.6.1",
