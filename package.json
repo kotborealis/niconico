@@ -1,0 +1,15 @@
+{
+  "name": "nicobot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {},
+  "license": "MIT",
+  "dependencies": {
+    "chen.js": "kotborealis/chen",
+    "debug": "^2.6.1",
+    "express": "^4.14.1",
+    "html-entities": "^1.2.0",
+    "request": "^2.79.0",
+    "youtube-video-api": "^0.3.6"
+  }
+}
