@@ -1,111 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>NicoNico downloader</title>
+    <title>NicoNico downloader</title>
 
-  <meta charset="UTF-8"/>
-  <meta name="description" content="NicoNico downloader"/>
-  <meta name="author" content="kotborealis@gmail.com"/>
-  <meta name="keywords" content="nicovideo,downloader"/>
+    <meta charset="UTF-8"/>
+    <meta name="description" content="NicoNico downloader"/>
+    <meta name="author" content="kotborealis@gmail.com"/>
+    <meta name="keywords" content="nicovideo,downloader"/>
 
-  <style>
-    *{
-      margin: 0;
-      padding: 0;
-      transition: 0.5s;
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            transition: 0.5s;
+        }
 
-    body{
-      background: #F7F7F7;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      color: rgba(0, 0, 0, 0.9);
-    }
+        body {
+            background: #F7F7F7;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color: rgba(0, 0, 0, 0.9);
+        }
 
-    .container{
-      margin: 100px auto;
-      max-width: 700px;
-      text-align: center;
-    }
+        .container {
+            margin: 100px auto;
+            max-width: 700px;
+            text-align: center;
+        }
 
-    #nico{
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-    }
+        #nico {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
 
-    h1{
-      font-size: 72px;
-      font-weight: 600;
-    }
+        h1 {
+            font-size: 72px;
+            font-weight: 600;
+        }
 
-    a{
-      color: #3A87AD;
-      text-decoration: none;
-    }
+        a {
+            color: #3A87AD;
+            text-decoration: none;
+        }
 
-    .lead{
-      font-size: 21px;
-      font-weight: 200;
-      line-height: 30px;
-      margin-bottom: 20px;
-    }
+        .lead {
+            font-size: 21px;
+            font-weight: 200;
+            line-height: 30px;
+            margin-bottom: 20px;
+        }
 
-    .nico-input{
-      border: 1px solid #B7D1A0;
-      border-bottom: 0;
-      border-radius: 4px;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-      line-height: 35px;
-      height: 40px;
-      font-size: 30px;
-      color: rgba(0, 0, 0, 0.9);
-      padding: 2px 8px;
-    }
+        .nico-input {
+            border: 1px solid #B7D1A0;
+            border-bottom: 0;
+            border-radius: 4px 4px 0 0;
+            line-height: 35px;
+            height: 40px;
+            font-size: 30px;
+            color: rgba(0, 0, 0, 0.9);
+            padding: 2px 8px;
+        }
 
-    .nico-submit{
-      background: rgba(202,230,190,.75);
-      color: #468847;
-      border: 1px solid #B7D1A0;
-      border-top: 0;
-      border-radius: 4px;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      line-height: 35px;
-      height: 44px;
-      font-size: 30px;
-      padding: 4px 0;
-    }
+        .nico-submit {
+            background: rgba(202, 230, 190, .75);
+            color: #468847;
+            border: 1px solid #B7D1A0;
+            border-top: 0;
+            border-radius: 0 0 4px 4px;
+            line-height: 35px;
+            height: 44px;
+            font-size: 30px;
+            padding: 4px 0;
+        }
 
-    .nico-submit:hover, .nico-submit:active, .nico-submit:focus{
-      background: #bce4aa;
-    }
+        .status {
+            font-size: 14px;
+            font-weight: 700;
+            border-top: 1px dashed rgba(0, 0, 0, 0.1);
+            padding: 5px;
+            text-align: left;
+        }
 
-    .nico-action{
-      margin: 20px;
-      line-height: 20px;
-      font-size: 18px;
-    }
+        .status--error{
+            color: #891A18;
+        }
 
-  </style>
+        .nico-submit:hover, .nico-submit:active, .nico-submit:focus {
+            background: #bce4aa;
+        }
+
+        .nico-action {
+            margin: 20px;
+            line-height: 20px;
+            font-size: 18px;
+        }
+
+    </style>
 </head>
 <body>
-  <div class="container">
+<div class="container">
     <form id="nico">
-      <h1>NicoNico!</h1>
-      <p class="lead">Download or reupload videos from NinoNico</p>
-      <input class="nico-input" type="text" placeholder="nicovideo.jp/watch/sm29394089"/>
-      <button class="nico-submit" type="submit">Nai desu</button>
-      <div class="nico-action">
-        <input type="radio" name="nico-action-group" value="download" checked> Download
-        <input type="radio" name="nico-action-group" value="reupload"> Reupload to <a href="https://www.youtube.com/channel/UCQ8PDMlMt4r-YK672QitWlQ">YouTube</a>
-      </div>
+        <h1>NicoNico!</h1>
+        <p class="lead">Download or reupload videos from NinoNico</p>
+        <input class="nico-input" type="text" placeholder="nicovideo.jp/watch/sm29394089"/>
+        <button class="nico-submit" type="submit">Nai desu</button>
+        <div class="nico-action">
+            <input type="radio" class='nico-action-group' name="nico-action-group" value="download" checked> Download
+            <input type="radio" class='nico-action-group' name="nico-action-group" value="reupload"> Reupload to <a
+                href="https://www.youtube.com/channel/UCQ8PDMlMt4r-YK672QitWlQ">YouTube</a>
+        </div>
+        <div class="status">
+        </div>
     </form>
-  </div>
+</div>
+<iframe style="display: none" id="invisible_iframe"></iframe>
 </body>
 
 <script>
+    const nico_url = (id) => `http://nicovideo.jp/watch/sm${id}`;
+    const youtube_url = (id) => `https://www.youtube.com/watch?v=${id}`;
 
+    const nico_form_handler = {
+        get(target, prop){
+            switch(prop){
+                case 'id':
+                    const value = document.querySelector('.nico-input').value;
+                    const match = value && value.match(/sm(\d+)/i);
+                    Reflect.set(target, prop, match && match[1]);
+                    return Reflect.get(target, prop);
+                case 'action':
+                    Reflect.set(target, prop, [...document.querySelectorAll('.nico-action-group')].reduce((action, i) => i.checked ? i.value : action, null));
+                    return Reflect.get(target, prop);
+                default:
+                    return Reflect.get(target, prop);
+            }
+        },
+        set(){
+            return undefined;
+        }
+    };
+
+    const nico_form_data = {};
+    ['id', 'action'].forEach(i => nico_form_handler.get(nico_form_data, i));
+
+    const nico_form = new Proxy(nico_form_data, nico_form_handler);
+
+    const set_status = (text, error = false) => {
+        const status = document.querySelector('.status');
+        if(error){
+            status.classList.add('status--error');
+        }
+        else{
+            status.classList.remove('status--error');
+        }
+
+        status.innerHTML = text;
+    };
+
+    const fetch_info = (id) => new Promise((resolve, reject) => {
+        fetch('/api/info/' + id)
+        .then(res => res.json())
+        .then(info => {
+            if(info.error){
+                reject(info);
+            }
+            else{
+                resolve(info);
+            }
+        });
+    });
+
+    const fetch_youtube = (id) => new Promise((resolve, reject) => {
+        fetch('/api/youtube/' + id)
+        .then(res => res.json())
+        .then(data => {
+            if(data.error){
+                reject(data);
+            }
+            else{
+                resolve(data);
+            }
+        });
+    });
+
+    document.querySelector('#nico').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const id = nico_form.id;
+        const action = nico_form.action;
+        if(!id){
+            set_status('Invalid link;', true);
+        }
+        else{
+            set_status('Grabbing video info...');
+            fetch_info(id)
+            .then(info => {
+                const action_text = (() => {
+                    switch(action){
+                        case 'download': return 'Downloading';
+                        case 'reupload': return 'Uploading';
+                        default: return 'Eat shit, asshole!';
+                    }
+                })();
+
+                set_status(`${action_text}: <a href='${nico_url(id)}' target="_blank">${info.title}</a>`);
+
+                if(action === 'download'){
+                    document.querySelector('#invisible_iframe').src = '/api/download/' + id;
+                }
+                else if(action === 'reupload'){
+                    fetch_youtube(id)
+                    .then(data => {
+                        const url = youtube_url(data.id);
+                        set_status(`Upload finished: <a href='${url}' target="_blank">${info.title} — ${url}</a>`);
+                    })
+                    .catch(() => {
+                        set_status('Something went wrong; Try again', true);
+                    });
+                }
+            })
+            .catch(() => {
+                set_status('Something went wrong; Try again', true);
+            });
+        }
+    });
 </script>
 
 </html>
