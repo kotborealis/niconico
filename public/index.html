@@ -135,17 +135,24 @@
 
     const ui = new UI;
 
-    const updateUploadStatus = (progress) => {
-        let payload = `${action_text}: <a href='${nico_url(id)}' target="_blank">${info.title}</a>`;
-        if(progress){
-            payload += ` ${Math.floor(progress.progress/progress.size * 100)}%`;
+    const current = {
+        info: null,
+        id: null,
+        progress: null
+    };
+
+    const updateUploadStatus = () => {
+        let payload = `<a href='${nico_url(current.id)}' target="_blank">${current.info.title}</a>`;
+        if(current.progress){
+            payload += ` ${Math.floor(current.progress.progress/current.progress.size * 100)}%`;
         }
         ui.status = payload;
     };
 
     const sse_handler = {
         progress_cb(progress){
-            updateUploadStatus(progress);
+            current.progress = progress;
+            updateUploadStatus();
         },
         error_cb(){
             ui.error = 'Something went wrong; Try again;';
@@ -153,14 +160,22 @@
         },
         video_cb(data){
             const url = youtube_url(data.video.id);
-            ui.status = `Upload finished: <a href='${url}' target="_blank">${info.title} — ${url}</a>`;
+            ui.status = `Upload finished: <a href='${url}' target="_blank">${current.info.title} — ${url}</a>`;
             ui.disabled = false;
         }
     };
 
-    ui.onsubmit = (event) => {
+    if(localStorage.getItem('task')){
+        current.info = JSON.parse(localStorage.getItem('info'));
+        current.id = JSON.parse(localStorage.getItem('id'));
+        ui.disabled = true;
+        api.sse(localStorage.getItem('task'), sse_handler);
+    }
+
+    ui.onsubmit = () => {
         ui.disabled = true;
         const id = ui.id;
+        current.id = id;
         const action = ui.action;
         if(!id){
             ui.error = 'Invalid link;';
@@ -169,16 +184,9 @@
         else{
             ui.status = 'Grabbing video info...';
             api.fetch_info(id)
-            .then(info => {
-                const action_text = (() => {
-                    switch(action){
-                        case 'download': return 'Downloading';
-                        case 'reupload': return 'Uploading';
-                        default: return 'Eat shit, asshole!';
-                    }
-                })();
-
-                ui.status = `${action_text}: <a href='${nico_url(id)}' target="_blank">${info.title}</a>`;
+                .then(info => {
+                current.info = info;
+                ui.status = `<a href='${nico_url(id)}' target="_blank">${info.title}</a>`;
 
                 updateUploadStatus();
 
@@ -194,6 +202,9 @@
                             ui.disabled = false;
                         }
                         if(data.task){
+                            localStorage.setItem('task', id);
+                            localStorage.setItem('info', JSON.stringify(info));
+                            localStorage.setItem('id', JSON.stringify(id));
                             api.sse(id, sse_handler);
                         }
                     });
@@ -206,5 +217,4 @@
         }
     };
 </script>
-
 </html>

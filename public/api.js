@@ -32,12 +32,12 @@ const sse = (id, {progress_cb, error_cb, video_cb}) => {
     });
     sse.addEventListener('error', () => {
         sse.close();
-        localStorage.setItem('task', null);
+        localStorage.removeItem('task');
         error_cb();
     });
     sse.addEventListener('video', (data) => {
         sse.close();
-        localStorage.setItem('task', null);
+        localStorage.removeItem('task');
         data = JSON.parse(data.data);
         video_cb(data);
     });
