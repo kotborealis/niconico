@@ -73,12 +73,22 @@
             padding: 4px 0;
         }
 
+        .nico-submit--disabled {
+            background: rgba(101, 122, 98, 0.75);
+            color: #336633;
+            border: 1px solid #879c73;
+        }
+
         .status {
             font-size: 14px;
             font-weight: 700;
             border-top: 1px dashed rgba(0, 0, 0, 0.1);
             padding: 5px;
             text-align: left;
+        }
+
+        .status--error {
+            color: #a80000;
         }
 
         .nico-submit:hover, .nico-submit:active, .nico-submit:focus {
@@ -107,7 +117,7 @@
             </label>
             <label>
                 <input type="radio" class='nico-action-group' name="nico-action-group" value="reupload">
-                Reupload to <a href="https://www.youtube.com/channel/UCQ8PDMlMt4r-YK672QitWlQ">YouTube</a>
+                Reupload to <a href="https://www.youtube.com/channel/UCQ8PDMlMt4r-YK672QitWlQ" target="_blank">YouTube</a>
             </label>
         </div>
         <div class="status">
@@ -117,83 +127,25 @@
 <iframe style="display: none" id="invisible_iframe"></iframe>
 </body>
 
+<script src="ui.js"></script>
+<script src="api.js"></script>
 <script>
     const nico_url = (id) => `http://nicovideo.jp/watch/sm${id}`;
     const youtube_url = (id) => `https://www.youtube.com/watch?v=${id}`;
 
-    const nico_form_handler = {
-        get(target, prop){
-            switch(prop){
-                case 'id':
-                    const value = document.querySelector('.nico-input').value;
-                    const match = value && value.match(/sm(\d+)/i);
-                    Reflect.set(target, prop, match && match[1]);
-                    return Reflect.get(target, prop);
-                case 'action':
-                    Reflect.set(target, prop, [...document.querySelectorAll('.nico-action-group')].reduce((action, i) => i.checked ? i.value : action, null));
-                    return Reflect.get(target, prop);
-                default:
-                    return Reflect.get(target, prop);
-            }
-        },
-        set(){
-            return undefined;
-        }
-    };
+    const ui = new UI;
 
-    const nico_form_data = {};
-    ['id', 'action'].forEach(i => nico_form_handler.get(nico_form_data, i));
-
-    const nico_form = new Proxy(nico_form_data, nico_form_handler);
-
-    const set_status = (text, error = false) => {
-        const status = document.querySelector('.status');
-        if(error){
-            status.classList.add('status--error');
-        }
-        else{
-            status.classList.remove('status--error');
-        }
-
-        status.innerHTML = text;
-    };
-
-    const fetch_info = (id) => new Promise((resolve, reject) => {
-        fetch('/api/info/' + id)
-        .then(res => res.json())
-        .then(info => {
-            if(info.error){
-                reject(info);
-            }
-            else{
-                resolve(info);
-            }
-        });
-    });
-
-    const fetch_youtube = (id) => new Promise((resolve, reject) => {
-        fetch('/api/v2/youtube/' + id)
-        .then(res => res.json())
-        .then(data => {
-            if(data.error){
-                reject(data);
-            }
-            else{
-                resolve(data);
-            }
-        });
-    });
-
-    document.querySelector('#nico').addEventListener('submit', (event) => {
-        event.preventDefault();
-        const id = nico_form.id;
-        const action = nico_form.action;
+    ui.onsubmit = (event) => {
+        ui.disabled = true;
+        const id = ui.id;
+        const action = ui.action;
         if(!id){
-            set_status('Invalid link;', true);
+            ui.error = 'Invalid link;';
+            ui.disabled = false;
         }
         else{
-            set_status('Grabbing video info...');
-            fetch_info(id)
+            ui.status = 'Grabbing video info...';
+            api.fetch_info(id)
             .then(info => {
                 const action_text = (() => {
                     switch(action){
@@ -203,55 +155,54 @@
                     }
                 })();
 
-                set_status(`${action_text}: <a href='${nico_url(id)}' target="_blank">${info.title}</a>`);
+                ui.status = `${action_text}: <a href='${nico_url(id)}' target="_blank">${info.title}</a>`;
 
                 const update_status = (progress) => {
                     let payload = `${action_text}: <a href='${nico_url(id)}' target="_blank">${info.title}</a>`;
                     if(progress){
                         payload += ` ${Math.floor(progress.progress/progress.size * 100)}%`;
                     }
-                    set_status(payload);
+                    ui.status = payload;
                 };
 
                 update_status();
 
                 if(action === 'download'){
                     document.querySelector('#invisible_iframe').src = '/api/download/' + id;
+                    ui.disabled = false;
                 }
                 else if(action === 'reupload'){
-                    fetch_youtube(id).then(data => {
+                    api.fetch_youtube(id).then(data => {
                         if(data.video){
                             const url = youtube_url(data.video.id);
-                            set_status(`Upload finished: <a href='${url}' target="_blank">${info.title} — ${url}</a>`);
+                            ui.status = `Upload finished: <a href='${url}' target="_blank">${info.title} — ${url}</a>`;
+                            ui.disabled = false;
                         }
                         if(data.task){
-                            localStorage.setItem('task', id);
-                            const sse = new EventSource('/api/v2/youtube/sse/' + id);
-                            sse.addEventListener('progress', (data) => {
-                                data = JSON.parse(data.data);
-                                update_status(data);
-                            });
-                            sse.addEventListener('error', () => {
-                                sse.close();
-                                localStorage.setItem('task', null);
-                                set_status('Something went wrong; Try again', true);
-                            });
-                            sse.addEventListener('video', (data) => {
-                                sse.close();
-                                localStorage.setItem('task', null);
-                                data = JSON.parse(data.data);
-                                const url = youtube_url(data.video.id);
-                                set_status(`Upload finished: <a href='${url}' target="_blank">${info.title} — ${url}</a>`);
+                            api.sse(id, {
+                                progress_cb(progress){
+                                    update_status(progress);
+                                },
+                                error_cb(){
+                                    ui.error = 'Something went wrong; Try again;';
+                                    ui.disabled = false;
+                                },
+                                video_cb(data){
+                                    const url = youtube_url(data.video.id);
+                                    ui.status = `Upload finished: <a href='${url}' target="_blank">${info.title} — ${url}</a>`;
+                                    ui.disabled = false;
+                                }
                             });
                         }
                     });
                 }
             })
             .catch((e) => {
-                set_status('Something went wrong; Try again; ' + e, true);
+                ui.error = 'Something went wrong; Try again; ' + e;
+                ui.disabled = false;
             });
         }
-    });
+    };
 </script>
 
 </html>
