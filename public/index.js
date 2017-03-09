@@ -65,7 +65,7 @@ ui.onsubmit = () => {
                 });
             }
         })
-            .catch((e) => {
+        .catch((e) => {
             ui.error = 'Something went wrong; Try again; ' + e;
             ui.disabled = false;
         });
