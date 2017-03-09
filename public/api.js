@@ -32,15 +32,19 @@ const sse = (id, {progress_cb, error_cb, video_cb}) => {
     });
     sse.addEventListener('error', () => {
         sse.close();
-        localStorage.removeItem('task');
+        delete localStorage['id'];
         error_cb();
     });
     sse.addEventListener('video', (data) => {
         sse.close();
-        localStorage.removeItem('task');
+        delete localStorage['id'];
         data = JSON.parse(data.data);
         video_cb(data);
     });
+    sse.addEventListener('not_found', () => {
+        sse.close();
+        delete localStorage['id'];
+    })
 };
 
 window.api = {
