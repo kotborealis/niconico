@@ -135,6 +135,29 @@
 
     const ui = new UI;
 
+    const updateUploadStatus = (progress) => {
+        let payload = `${action_text}: <a href='${nico_url(id)}' target="_blank">${info.title}</a>`;
+        if(progress){
+            payload += ` ${Math.floor(progress.progress/progress.size * 100)}%`;
+        }
+        ui.status = payload;
+    };
+
+    const sse_handler = {
+        progress_cb(progress){
+            updateUploadStatus(progress);
+        },
+        error_cb(){
+            ui.error = 'Something went wrong; Try again;';
+            ui.disabled = false;
+        },
+        video_cb(data){
+            const url = youtube_url(data.video.id);
+            ui.status = `Upload finished: <a href='${url}' target="_blank">${info.title} — ${url}</a>`;
+            ui.disabled = false;
+        }
+    };
+
     ui.onsubmit = (event) => {
         ui.disabled = true;
         const id = ui.id;
@@ -157,15 +180,7 @@
 
                 ui.status = `${action_text}: <a href='${nico_url(id)}' target="_blank">${info.title}</a>`;
 
-                const update_status = (progress) => {
-                    let payload = `${action_text}: <a href='${nico_url(id)}' target="_blank">${info.title}</a>`;
-                    if(progress){
-                        payload += ` ${Math.floor(progress.progress/progress.size * 100)}%`;
-                    }
-                    ui.status = payload;
-                };
-
-                update_status();
+                updateUploadStatus();
 
                 if(action === 'download'){
                     document.querySelector('#invisible_iframe').src = '/api/download/' + id;
@@ -179,20 +194,7 @@
                             ui.disabled = false;
                         }
                         if(data.task){
-                            api.sse(id, {
-                                progress_cb(progress){
-                                    update_status(progress);
-                                },
-                                error_cb(){
-                                    ui.error = 'Something went wrong; Try again;';
-                                    ui.disabled = false;
-                                },
-                                video_cb(data){
-                                    const url = youtube_url(data.video.id);
-                                    ui.status = `Upload finished: <a href='${url}' target="_blank">${info.title} — ${url}</a>`;
-                                    ui.disabled = false;
-                                }
-                            });
+                            api.sse(id, sse_handler);
                         }
                     });
                 }
