@@ -11,8 +11,9 @@
     "chen.js": "kotborealis/chen",
     "debug": "^2.6.1",
     "express": "^4.14.1",
+    "googleapis": "^18.0.0",
     "html-entities": "^1.2.0",
-    "request": "^2.79.0",
-    "youtube-video-api": "^0.3.6"
+    "mime": "^1.3.4",
+    "request": "^2.79.0"
   }
 }
