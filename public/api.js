@@ -44,6 +44,7 @@ const sse = (id, {progress_cb, error_cb, video_cb}) => {
     sse.addEventListener('not_found', () => {
         sse.close();
         delete localStorage['id'];
+        error_cb();
     })
 };
 

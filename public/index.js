@@ -4,7 +4,7 @@ const youtube_url = (id) => `https://www.youtube.com/watch?v=${id}`;
 const ui = new UI;
 
 const updateUploadStatus = (progress) => {
-    let payload = `<a href='${nico_url(localStorage['id'])}' target="_blank">${localStorage['title']}</a>`;
+    let payload = `Uploading: <a href='${nico_url(localStorage['id'])}' target="_blank">${localStorage['title']}</a>`;
     if(progress){
         payload += ` ${Math.floor(progress.progress/progress.size * 100)}%`;
     }
@@ -44,12 +44,12 @@ ui.onsubmit = () => {
         api.fetch_info(id)
             .then(info => {
             const title = localStorage['title'] = info.title;
-            ui.status = `<a href='${nico_url(id)}' target="_blank">${title}</a>`;
 
             updateUploadStatus();
 
             if(action === 'download'){
                 document.querySelector('#invisible_iframe').src = '/api/download/' + id;
+                ui.status = `Downloading: <a href='${nico_url(localStorage['id'])}' target="_blank">${localStorage['title']}</a>`;
                 ui.disabled = false;
             }
             else if(action === 'reupload'){
