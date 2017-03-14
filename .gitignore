@@ -1,3 +1,4 @@
 config/*
 node_modules/*
-.google-oauth2-credentials.json
+lib/.google-tokens.json
+yarn.lock
