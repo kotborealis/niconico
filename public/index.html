@@ -88,6 +88,12 @@
         .status--error {
             color: #a80000;
         }
+
+        .nico-action {
+            margin: 20px;
+            line-height: 20px;
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
@@ -96,7 +102,17 @@
         <h1>NicoNico!</h1>
         <p class="lead">Download videos from NinoNico</p>
         <input class="nico-input" type="text" placeholder="nicovideo.jp/watch/sm29394089"/>
-        <button class="nico-submit" type="submit">Desu~</button>
+        <button class="nico-submit" type="submit">!</button>
+        <div class="nico-action">
+            <label>
+                <input type="radio" class='nico-action-group' name="nico-action-group" value="download" checked>
+                Download
+            </label>
+            <label>
+                <input type="radio" class='nico-action-group' name="nico-action-group" value="host">
+                Rehost</a>
+            </label>
+        </div>
     </form>
     <div class="status"></div>
 </div>

@@ -5,6 +5,8 @@ const handler = {
                 const value = document.querySelector('.nico-input').value;
                 const match = value && value.match(/sm(\d+)/i);
                 return match && match[1];
+            case 'action':
+                return [...document.querySelectorAll('.nico-action-group')].reduce((action, i) => i.checked ? i.value : action, null);
             default:
                 return undefined;
         }
