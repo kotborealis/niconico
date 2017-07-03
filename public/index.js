@@ -58,6 +58,18 @@ ui.onsubmit = () => {
                     }
                 });
             }
+            else if(action === 'reupload'){
+                api.fetch_reupload(id).then(data => {
+                    if(data.video){
+                        const url = data.video.url;
+                        ui.status = `Upload finished: <a href='${url}' target="_blank">${localStorage['title']} — ${url}</a>`;
+                        ui.disabled = false;
+                    }
+                    if(data.task){
+                        api.sse(id, sse_handler);
+                    }
+                });
+            }
         })
         .catch((e) => {
             ui.error = 'Something went wrong; Try again; ' + e;

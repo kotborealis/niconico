@@ -13,6 +13,7 @@ const fetch_ = (endpoint, id) => new Promise((resolve, reject) => {
 const fetch_info = fetch_.bind(null, '/api/info/');
 const fetch_download = fetch_.bind(null, '/api/download/');
 const fetch_host = fetch_.bind(null, '/api/host/');
+const fetch_reupload = fetch_.bind(null, '/api/reupload/');
 
 const sse = (id, {progress_cb, error_cb, video_cb}) => {
     const sse = new EventSource('/api/host/sse/' + id);
@@ -39,5 +40,5 @@ const sse = (id, {progress_cb, error_cb, video_cb}) => {
 };
 
 window.api = {
-   fetch_info, fetch_host, fetch_download, sse
+   fetch_info, fetch_host, fetch_download, sse, fetch_reupload
 };
