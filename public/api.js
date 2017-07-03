@@ -11,43 +11,6 @@ const fetch_info = (id) => new Promise((resolve, reject) => {
     });
 });
 
-const fetch_youtube = (id) => new Promise((resolve, reject) => {
-    fetch('/api/v2/youtube/' + id)
-    .then(res => res.json())
-     .then(data => {
-        if(data.error){
-            reject(data);
-        }
-        else{
-            resolve(data);
-        }
-    });
-});
-
-const sse = (id, {progress_cb, error_cb, video_cb}) => {
-    const sse = new EventSource('/api/v2/youtube/sse/' + id);
-    sse.addEventListener('progress', (data) => {
-        data = JSON.parse(data.data);
-        progress_cb(data);
-    });
-    sse.addEventListener('error', () => {
-        sse.close();
-        delete localStorage['id'];
-        error_cb();
-    });
-    sse.addEventListener('video', (data) => {
-        sse.close();
-        delete localStorage['id'];
-        data = JSON.parse(data.data);
-        video_cb(data);
-    });
-    sse.addEventListener('not_found', () => {
-        sse.close();
-        delete localStorage['id'];
-        error_cb();
-    })
-};
-
 window.api = {
-    sse, fetch_info, fetch_youtube
+   fetch_info
 };

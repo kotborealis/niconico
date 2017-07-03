@@ -5,7 +5,7 @@
   "repository": {},
   "license": "MIT",
   "scripts": {
-    "start": "node lib/webserver.js"
+    "start": "node lib/webserver.js --config config/prod.js"
   },
   "dependencies": {
     "chen.js": "kotborealis/chen",

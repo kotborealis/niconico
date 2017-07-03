@@ -1,4 +1,3 @@
-config/*
 node_modules/*
 lib/.google-tokens.json
 yarn.lock

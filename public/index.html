@@ -73,7 +73,8 @@
             padding: 4px 0;
         }
 
-        .nico-submit--disabled {
+        .nico-submit:hover, .nico-submit:active, .nico-submit:focus {
+            background: #bce4aa;
         }
 
         .status {
@@ -87,39 +88,17 @@
         .status--error {
             color: #a80000;
         }
-
-        .nico-submit:hover, .nico-submit:active, .nico-submit:focus {
-            background: #bce4aa;
-        }
-
-        .nico-action {
-            margin: 20px;
-            line-height: 20px;
-            font-size: 18px;
-        }
-
     </style>
 </head>
 <body>
 <div class="container">
     <form id="nico">
         <h1>NicoNico!</h1>
-        <p class="lead">Download or reupload videos from NinoNico</p>
+        <p class="lead">Download videos from NinoNico</p>
         <input class="nico-input" type="text" placeholder="nicovideo.jp/watch/sm29394089"/>
-        <button class="nico-submit" type="submit">Nai desu</button>
-        <div class="nico-action">
-            <label>
-                <input type="radio" class='nico-action-group' name="nico-action-group" value="download" checked>
-                Download
-            </label>
-            <label>
-                <input type="radio" class='nico-action-group' name="nico-action-group" value="reupload">
-                Reupload to <a href="https://www.youtube.com/channel/UCQ8PDMlMt4r-YK672QitWlQ" target="_blank">YouTube</a>
-            </label>
-        </div>
-        <div class="status">
-        </div>
+        <button class="nico-submit" type="submit">Desu~</button>
     </form>
+    <div class="status"></div>
 </div>
 <iframe style="display: none" id="invisible_iframe"></iframe>
 </body>
