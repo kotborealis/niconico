@@ -16,7 +16,7 @@ const fetch_host = fetch_.bind(null, './api/host/');
 const fetch_reupload = fetch_.bind(null, './api/reupload/');
 
 const sse = (id, {progress_cb, error_cb, video_cb}) => {
-    const sse = new EventSource('/api/host/sse/' + id);
+    const sse = new EventSource('./api/host/sse/' + id);
     sse.addEventListener('progress', (data) => {
         data = JSON.parse(data.data);
         progress_cb(data);
